@@ -1,38 +1,59 @@
-/**
- * index.js
- * @description :: exports all the models and its relationships among other models
- */
 
-const dbConnection = require('../config/dbConnection');
-const db = {};
+let dbConnection = require('../config/dbConnection');
+
+const Accountpromise = require('./account');
+const Activitypromise = require('./activity');
+const Assetpromise = require('./asset');
+const Associationpromise = require('./association');
+const Blogpromise = require('./blog');
+const Blogcategorypromise = require('./blogcategory');
+const Contactpromise = require('./contact');
+const Donationpromise = require('./donation');
+const Imagepromise = require('./image');
+const Leaderpromise = require('./leader');
+const Nationpromise = require('./nation');
+const ProjectRoutepromise = require('./projectRoute');
+const PushNotificationpromise = require('./pushNotification');
+const Regionpromise = require('./region');
+const Rolepromise = require('./role')
+const RouteRolepromise = require('./routeRole');
+const Subregionpromise = require('./subregion');
+const UserAuthSettingspromise = require('./userAuthSettings');
+const UserRolepromise = require('./userRole');
+const UserTokenspromise = require('./userTokens');
+const db = {}
+
+const dbpromise = dbConnection.then( async (dbConnection) => {
 db.sequelize = dbConnection;
 
-db.activity = require('./activity');
-db.subregion = require('./subregion');
-db.region = require('./region');
-db.nation = require('./nation');
-db.leader = require('./leader');
-db.image = require('./image');
-db.donation = require('./donation');
-db.contact = require('./contact');
-db.blogcategory = require('./blogcategory');
-db.blog = require('./blog');
-db.association = require('./association');
-db.asset = require('./asset');
-db.account = require('./account');
-db.userAuthSettings = require('./userAuthSettings');
-db.userTokens = require('./userTokens');
-db.pushNotification = require('./pushNotification');
-db.role = require('./role');
-db.projectRoute = require('./projectRoute');
-db.routeRole = require('./routeRole');
-db.userRole = require('./userRole');
+ db.blog = await Blogpromise;
+ db.account = await Accountpromise;
+ db.activity = await Activitypromise;
+ db.asset = await Assetpromise;
+ db.association = await Associationpromise;
+ db.blogcategory = await Blogcategorypromise;
+ db.contact = await Contactpromise;
+ db.donation = await Donationpromise;
+ db.image = await Imagepromise;
+ db.leader = await Leaderpromise;
+ db.nation = await Nationpromise;
+ db.projectRoute = await ProjectRoutepromise;
+ db.push = await PushNotificationpromise;
+ db.region = await Regionpromise;
+ db.role = await Rolepromise;
+ db.routeRole = await RouteRolepromise;
+ db.subregion = await Subregionpromise;
+ db.userAuthSettings = await UserAuthSettingspromise;
+ db.userRole = await UserRolepromise;
+ db.userTokens = await UserTokenspromise;
+
 
 db.blog.belongsTo(db.activity, {
   foreignKey: 'idActivity',
   as: '_idActivity',
   targetKey: 'idActivity' 
 });
+
 db.activity.hasOne(db.blog, {
   foreignKey: 'idActivity',
   sourceKey: 'idActivity' 
@@ -524,4 +545,10 @@ db.projectRoute.hasMany(db.routeRole, {
   sourceKey: 'id' 
 });
 
-module.exports = db;
+
+return db;
+   
+})
+
+
+module.exports = dbpromise;

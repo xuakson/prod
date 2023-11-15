@@ -7,17 +7,22 @@ const dotenv = require('dotenv');
 dotenv.config();
 process.env.NODE_ENV = 'test';
 const request = require('supertest');
-const db = require('../../config/dbConnection');
+var db = require('../../config/dbConnection');
 const app = require('../../app');
 const authConstant = require('../../constants/authConstant');
 const routes = require('../../routes');
 app.use(routes);
 
 beforeAll(async function () {
-  await db.sync({});
+  // await db.sync({});
+
+   db = await db;
+   await db.sync({});
+ 
 });
 
-afterAll(async function (){
+afterAll(async function () {
+  db = await db;
   await db.dropAllSchemas();
   await db.drop();
   await db.close();

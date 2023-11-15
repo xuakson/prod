@@ -141,7 +141,8 @@ async function getRoleAccessData (model,userId) {
  * @param {Object} filter : filter for query.
  * @return {Object} : information about duplicate fields.
  */
-const checkUniqueFieldsInDatabase = async (model, fieldsToCheck, data, operation, filter = {})=> {
+const checkUniqueFieldsInDatabase = async (model, fieldsToCheck, data, operation, filter = {}) => {
+
   switch (operation) {
   case 'INSERT':
     for (const field of fieldsToCheck) {
@@ -157,7 +158,9 @@ const checkUniqueFieldsInDatabase = async (model, fieldsToCheck, data, operation
           field: field,
           value:  data[field]
         };
-      }
+      } 
+
+      
     }
     break;
   case 'BULK_INSERT':

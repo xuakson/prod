@@ -14,10 +14,13 @@ const routes = require('../../routes');
 app.use(routes);
 
 beforeAll(async function () {
+
+  db = await db;
   await db.sync({});
 });
 
 afterAll(async function (){
+  db = await db;
   await db.dropAllSchemas();
   await db.drop();
   await db.close();

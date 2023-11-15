@@ -6,6 +6,7 @@
 const path = require('path');
 require('dotenv').config({ path: path.resolve(__dirname, '../.env') });
 const aws = require('@aws-sdk/client-sns');
+require('aws-sdk/lib/maintenance_mode_message').suppress = true;
 
 const sendSMS = async (obj) => {
   const PublishCommand = aws.PublishCommand;

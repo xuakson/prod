@@ -12,14 +12,15 @@ const dotenv = require('dotenv');
 const postmanToOpenApi = require('postman-to-openapi');
 const swaggerUi = require('swagger-ui-express');
 const YAML = require('yamljs');
-dotenv.config({ path:'.env' });
+dotenv.config({ path: '.env' });
 global.__basedir = __dirname;
 const listEndpoints = require('express-list-endpoints');
 const passport = require('passport');
 require('./utils/dbService');
+
 const models = require('./model');
+
 const seeder = require('./seeders');
-//all routes 
 const routes =  require('./routes');
 let logger = require('morgan');
 
@@ -58,25 +59,32 @@ app.get('/', (req, res) => {
   res.render('index');
 });
 
-if (process.env.NODE_ENV !== 'test' ) {
-  models.sequelize.sync({ alter:true }).then(()=>{
+if (process.env.NODE_ENV !== 'test') {
+  
+  models.then((model) => {
+
+    model.sequelize.sync({ alter:true }).then(()=>{
         
-  }).finally(()=>{
-    app.use(routes);
-    const allRegisterRoutes = listEndpoints(app);
-    seeder(allRegisterRoutes).then(()=>{console.log('Seeding done.');});
-    //swagger Documentation
-    postmanToOpenApi('postman/postman-collection.json', path.join('postman/swagger.yml'), { defaultTag: 'General' }).then(data => {
-      let result = YAML.load('postman/swagger.yml');
-      result.servers[0].url = '/';
-      app.use('/swagger', swaggerUi.serve, swaggerUi.setup(result));
-    }).catch(e=>{
-      console.log('Swagger Generation stopped due to some error');
+    }).catch(err => {
+      console.error("Error syncing database:", err);
+    }).finally(() => {
+      app.use(routes);
+      const allRegisterRoutes = listEndpoints(app);
+      seeder(allRegisterRoutes).then(()=>{console.log('Seeding done.');});
+      //swagger Documentation
+      postmanToOpenApi('postman/postman-collection.json', path.join('postman/swagger.yml'), { defaultTag: 'General' }).then(data => {
+        let result = YAML.load('postman/swagger.yml');
+        result.servers[0].url = '/';
+        app.use('/swagger', swaggerUi.serve, swaggerUi.setup(result));
+      }).catch(e=>{
+        console.log('Swagger Generation stopped due to some error');
+      });
     });
-  });
-  app.listen(process.env.PORT,()=>{
-    console.log(`your application is running on ${process.env.PORT}`);
-  });
+    app.listen(process.env.PORT,()=>{
+      console.log(`your application is running on ${process.env.PORT}`);
+    });
+  })
+ 
 } else {
   module.exports = app;
 }

@@ -3,22 +3,32 @@
  * @description :: exports values used to make connection with SQL database
  */
 
-if (process.env.NODE_ENV !== 'test'){
+const dotenv = require('dotenv');
+dotenv.config({ path: '.env' });
+
+
+
+
+if (process.env.NODE_ENV !== 'test') {
+  
   module.exports = {
-    HOST: process.env.HOST,
-    USER: process.env.DATABASE_USERNAME,
-    PASSWORD: process.env.DATABASE_PASSWORD,
-    DB: process.env.DATABASE_NAME,
-    dialect: 'mysql',
-    port: process.env.DB_PORT,
+
+    dbHost : process.env.HOST,
+    dbPort : process.env.DB_PORT,
+    dbUser : process.env.DATABASE_USERNAME,
+    dbPass : process.env.DATABASE_PASSWORD,
+    dbName : process.env.DATABASE_NAME,
+    dbDialect :  'mysql'
   };
+
 } else {
+  
   module.exports = {
-    HOST: process.env.TEST_HOST,
-    USER: process.env.TEST_DATABASE_USERNAME,
-    PASSWORD: process.env.TEST_DATABASE_PASSWORD,
-    DB: process.env.TEST_DATABASE_NAME,
-    dialect: 'mysql',
-    port: process.env.TEST_DB_PORT,
+    dbHost : process.env.HOST,
+    dbPort : process.env.DB_PORT,
+    dbUser : process.env.DATABASE_USERNAME,
+    dbPass : process.env.DATABASE_PASSWORD,
+    dbName : process.env.DATABASE_NAME,
+    dbDialect :  'mysql'
   };
 }

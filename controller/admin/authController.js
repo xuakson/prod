@@ -3,9 +3,13 @@
  * @description :: exports authentication methods
  */
 const authService =  require('../../services/auth');
-const {
-  account,role,userRole,userAuthSettings,userTokens,pushNotification
-} = require('../../model/index');
+// const {
+//   account,role,userRole,userAuthSettings,userTokens,pushNotification
+// } = require('../../model');
+
+const models = require('../../model');
+
+
 const dbService = require('../../utils/dbService');
 const dayjs = require('dayjs');
 const accountSchemaKey = require('../../utils/validation/accountValidation');
@@ -24,11 +28,14 @@ const {
  */
 const register = async (req, res) => {
   try {
+
+    const model = await models;
     let dataToRegister = req.body;
     let validateRequest = validation.validateParamsWithJoi(
       dataToRegister,
       accountSchemaKey.schemaKeys
     );
+
     if (!validateRequest.isValid) {
       return res.validationError({ message : `Invalid values in parameters, ${validateRequest.message}` });
     }
@@ -37,28 +44,42 @@ const register = async (req, res) => {
       isEmptyPassword = true;
       dataToRegister.password = Math.random().toString(36).slice(2);
     } 
+ 
 
-    let checkUniqueFields = await checkUniqueFieldsInDatabase(account,[ 'idAccount', 'eMail' ],dataToRegister,'INSERT');
+    let checkUniqueFields = await checkUniqueFieldsInDatabase(model.account, ['idAccount', 'eMail'], dataToRegister, 'INSERT');
+   
     if (checkUniqueFields.isDuplicate){
       return res.validationError({ message : `${checkUniqueFields.value} already exists.Unique ${checkUniqueFields.field} are allowed.` });
     }
 
-    const result = await dbService.createOne(account,{
+   
+    console.log(dbService.createOne(model.account, {
+      ...dataToRegister,
+      userType: authConstant.USER_TYPES.User
+    }))
+    const result = await dbService.createOne(model.account,{
       ...dataToRegister,
       userType: authConstant.USER_TYPES.User
     });
+
+  
+
+
+
     if (isEmptyPassword && req.body.email){
-      await sendPasswordByEmail({
+       sendPasswordByEmail({
         email: req.body.email,
         password: req.body.password
       });
     }
     if (isEmptyPassword && req.body.mobileNo){
-      await sendPasswordBySMS({
+       sendPasswordBySMS({
         mobileNo: req.body.mobileNo,
         password: req.body.password
       });
     }
+
+   
     return  res.success({ data :result });
   } catch (error) {
     return res.internalServerError({ message:error.message }); 
@@ -74,11 +95,12 @@ const register = async (req, res) => {
 const forgotPassword = async (req, res) => {
   const params = req.body;
   try {
+    const model = await models;
     if (!params.email) {
       return res.badRequest({ message : 'Insufficient request parameters! email is required' });
     }
     let where = { email: params.email.toString().toLowerCase() };
-    where.isActive = true;where.isDeleted = false;        let found = await dbService.findOne(account,where);
+    where.isActive = true;where.isDeleted = false;     let found = await dbService.findOne(model.account,where);
     if (!found) {
       return res.recordNotFound();
     } 
@@ -108,10 +130,11 @@ const forgotPassword = async (req, res) => {
 const validateResetPasswordOtp = async (req, res) => {
   const params = req.body;
   try {
+    const model = await models;
     if (!params.otp) {
       return res.badRequest({ message : 'Insufficient request parameters! otp is required.' });
     }
-    let found = await dbService.findOne(userAuthSettings, { resetPasswordCode: params.otp });
+    let found = await dbService.findOne(model.userAuthSettings, { resetPasswordCode: params.otp });
     if (!found || !found.resetPasswordCode) {
       return res.failure({ message :'Invalid OTP' });
     }
@@ -134,10 +157,11 @@ const validateResetPasswordOtp = async (req, res) => {
 const resetPassword = async (req, res) => {
   const params = req.body;
   try {
+    const model = await models;
     if (!params.code || !params.newPassword) {
       return res.badRequest({ message : 'Insufficient request parameters! code and newPassword is required.' });
     }
-    let userAuth = await dbService.findOne(userAuthSettings, { resetPasswordCode: params.code });
+    let userAuth = await dbService.findOne(model.userAuthSettings, { resetPasswordCode: params.code });
     if (userAuth && userAuth.expiredTimeOfResetPasswordCode) {
       if (dayjs(new Date()).isAfter(dayjs(userAuth.expiredTimeOfResetPasswordCode))) {// link expire
         return res.failure({ message :'Your reset password link is expired or invalid' });
@@ -187,6 +211,7 @@ const sendOtpForTwoFA = async (req,res)=>{
 const loginWithTwoFA = async (req, res) => {
   const params = req.body;
   try {
+    const model = await models;
     if (!params.code || !params.username || !params.password) {
       return res.badRequest({ message : 'Insufficient request parameters! username,password and code is required.' });
     }
@@ -196,7 +221,7 @@ const loginWithTwoFA = async (req, res) => {
       // invalid code
       return res.badRequest({ message :'Invalid Code' });
     } 
-    let userAuth = await dbService.findOne(userAuthSettings,{ userId:User.id });
+    let userAuth = await dbService.findOne(model.userAuthSettings,{ userId:User.id });
     if (userAuth && userAuth.loginOTP && userAuth.expiredTimeOfLoginOTP){
       if (dayjs(new Date()).isAfter(dayjs(userAuth.expiredTimeOfLoginOTP))) {// link expire
         return res.badRequest({ message :'Your reset password link is expired' });
@@ -242,6 +267,7 @@ const login = async (req,res)=>{
       roleAccess = req.body.includeRoleAccess;
     }
     let result = await authService.loginUser(username, password, authConstant.PLATFORM.ADMIN, roleAccess);
+   
     if (result.flag){
       return res.badRequest({ message:result.data });
     }
@@ -250,7 +276,8 @@ const login = async (req,res)=>{
       message :'Login successful.'
     });
   } catch (error) {
-    return res.internalServerError({ message:error.message }); 
+    console.log(error)
+    // return res.internalServerError({ message:error.message }); 
   }
 };
 
@@ -262,7 +289,8 @@ const login = async (req,res)=>{
  */
 const logout = async (req, res) => {
   try {
-    let userToken = await dbService.findOne(userTokens, {
+    const model = await models;
+    let userToken = await dbService.findOne(model.userTokens, {
       token: (req.headers.authorization).replace('Bearer ', ''),
       userId:req.user.id 
     });
@@ -270,7 +298,7 @@ const logout = async (req, res) => {
     let id = userToken.id;
     delete userToken.id;
     await dbService.update(userTokens,{ id:id }, userToken.toJSON());
-    let found = await dbService.findOne(pushNotification,{ userId:req.user.id });
+    let found = await dbService.findOne(model.pushNotification,{ userId:req.user.id });
     if (found){
       await dbService.update(pushNotification,{ id :found.id },{ isActive:false });
     }
@@ -287,11 +315,12 @@ const logout = async (req, res) => {
  */
 const addPlayerId = async (req, res) => {
   try {
+    const model = await models;
     let params = req.body;
     if (!params.userId || !params.playerId){
       return res.badRequest({ message : 'Insufficient request parameters! userId and playerId is required.' });
     }
-    let found = await dbService.findOne(pushNotification,{ userId:params.userId });
+    let found = await dbService.findOne(model.pushNotification,{ userId:params.userId });
     if (found){
       await dbService.update(pushNotification,{ id : found.id },{ playerId:params.playerId });
     } else {
@@ -312,11 +341,12 @@ const addPlayerId = async (req, res) => {
  */
 const removePlayerId = async (req, res) => {
   try {
+    const model = await models;
     let params = req.body;
     if (!params && !params.deviceId){
       return res.badRequest({ message : 'Insufficient request parameters! deviceId is required.' });
     }
-    let found = await dbService.findOne(pushNotification,{ deviceId:params.deviceId });
+    let found = await dbService.findOne(model.pushNotification,{ deviceId:params.deviceId });
     if (found){
       await dbService.destroy(pushNotification,{ id :found.id });
     }

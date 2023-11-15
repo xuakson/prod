@@ -2,17 +2,19 @@
  * seeder.js
  * @description :: functions that seeds mock data to run the application
  */
-const model = require('../model');
+var models = require('../model');
 const dbService = require('../utils/dbService');
 const bcrypt = require('bcrypt');
 const authConstant = require('../constants/authConstant');
 const { replaceAll } = require('../utils/common');
 
-/* seeds default users */
 async function seedUser () {
   try {
+    
+    var model = await models;
     let userToBeInserted = {};
-    userToBeInserted = await dbService.findOne(model.account,{ 'eMail':'Hildegard_Purdy17@gmail.com' });
+    userToBeInserted = await dbService.findOne(model.account, { 'eMail': 'Hildegard_Purdy17@gmail.com' });
+
     if (!userToBeInserted) {  
       userToBeInserted = {
         'userCode':'g8i2trrjtd',
@@ -61,7 +63,8 @@ async function seedUser () {
 }
   
 /* seeds roles */
-async function seedRole () {
+async function seedRole() {
+  var model = await models;
   try {
     const roles = [
       'Coordinator',
@@ -97,10 +100,11 @@ async function seedRole () {
 }
 
 /* seeds routes of project */
-async function seedProjectRoutes (routes) {
+async function seedProjectRoutes(routes) {
+  var model = await models;
   try {
     if (routes) {
-      let routeName = '';
+      let routeName = ''; 
       const dbRoutes = await dbService.findAll(model.projectRoute, {});
       let routeArr = [];
       let routeObj = {};
@@ -131,7 +135,8 @@ async function seedProjectRoutes (routes) {
 }
 
 /* seeds role for routes */
-async function seedRouteRole () {
+async function seedRouteRole() {
+  var model = await models;
   try {
     const routeRoles = [ 
       {
@@ -12754,15 +12759,19 @@ async function seedRouteRole () {
 }
 
 /* seeds roles for users */
-async function seedUserRole (){
+async function seedUserRole() {
+  var model = await models;
+  
   try {
+    
     const userRoles = [{
       'eMail':'Hildegard_Purdy17@gmail.com',
       'userCode':'g8i2trrjtd'
     },{
       'eMail':'Sydnie86@hotmail.com',
       'userCode':'lz39dgmpbg'
-    }];
+      }];
+      
     const defaultRoles = await dbService.findAll(model.role);
     const insertedUsers = await dbService.findAll(model.account, { username: { $in: userRoles.map(userRole => userRole.username) } });
     let user = {};
@@ -12813,7 +12822,8 @@ async function seedUserRole (){
         console.log('UserRole is upto date 🍺');
       }
     }
-  } catch (error){
+  } catch (error) {
+    
     console.log('UserRole seeder failed due to ', error.message);
   }
 }

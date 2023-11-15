@@ -9,7 +9,7 @@ const nationController = require('../../controller/admin/nationController');
 const { PLATFORM } =  require('../../constants/authConstant'); 
 const auth = require('../../middleware/auth');
 const checkRolePermission = require('../../middleware/checkRolePermission');
-router.route('/admin/nation/create').post(auth(PLATFORM.ADMIN),checkRolePermission,nationController.addNation);
+router.route('/admin/nation/create').post(auth(PLATFORM.ADMIN), checkRolePermission, nationController.addNation);
 router.route('/admin/nation/list').post(auth(PLATFORM.ADMIN),checkRolePermission,nationController.findAllNation);
 router.route('/admin/nation/count').post(auth(PLATFORM.ADMIN),checkRolePermission,nationController.getNationCount);
 router.route('/admin/nation/:id').get(auth(PLATFORM.ADMIN),checkRolePermission,nationController.getNation);
