@@ -63,22 +63,31 @@ if (process.env.NODE_ENV !== 'test') {
   
   models.then((model) => {
 
-    model.sequelize.sync({ alter:true }).then(()=>{
+    // model.sequelize.sync({ alter:true }).then(()=>{
         
-    }).catch(err => {
-      console.error("Error syncing database:", err);
-    }).finally(() => {
-      app.use(routes);
-      const allRegisterRoutes = listEndpoints(app);
-      seeder(allRegisterRoutes).then(()=>{console.log('Seeding done.');});
-      //swagger Documentation
-      postmanToOpenApi('postman/postman-collection.json', path.join('postman/swagger.yml'), { defaultTag: 'General' }).then(data => {
-        let result = YAML.load('postman/swagger.yml');
-        result.servers[0].url = '/';
-        app.use('/swagger', swaggerUi.serve, swaggerUi.setup(result));
-      }).catch(e=>{
-        console.log('Swagger Generation stopped due to some error');
-      });
+    // }).catch(err => {
+    //   console.error("Error syncing database:", err);
+    // }).finally(() => {
+    //   app.use(routes);
+    //   const allRegisterRoutes = listEndpoints(app);
+    //   seeder(allRegisterRoutes).then(()=>{console.log('Seeding done.');});
+    //   //swagger Documentation
+    //   postmanToOpenApi('postman/postman-collection.json', path.join('postman/swagger.yml'), { defaultTag: 'General' }).then(data => {
+    //     let result = YAML.load('postman/swagger.yml');
+    //     result.servers[0].url = '/';
+    //     app.use('/swagger', swaggerUi.serve, swaggerUi.setup(result));
+    //   }).catch(e=>{
+    //     console.log('Swagger Generation stopped due to some error');
+    //   });
+    // });
+    app.use(routes);
+    const allRegisterRoutes = listEndpoints(app);
+    postmanToOpenApi('postman/postman-collection.json', path.join('postman/swagger.yml'), { defaultTag: 'General' }).then(data => {
+      let result = YAML.load('postman/swagger.yml');
+      result.servers[0].url = '/';
+      app.use('/swagger', swaggerUi.serve, swaggerUi.setup(result));
+    }).catch(e=>{
+      console.log('Swagger Generation stopped due to some error');
     });
     app.listen(process.env.PORT,()=>{
       console.log(`your application is running on ${process.env.PORT}`);
