@@ -459,7 +459,8 @@ const sendResetPasswordNotification = async (user) => {
         if (user.email) {
           res = await sendEmailForLoginOtp(user);
         }
-      } else if (DEFAULT_SEND_LOGIN_OTP === SEND_LOGIN_OTP.SMS) {
+      }
+      else if (DEFAULT_SEND_LOGIN_OTP === SEND_LOGIN_OTP.SMS) {
         // send SMS here
       }
       if (!res) {
