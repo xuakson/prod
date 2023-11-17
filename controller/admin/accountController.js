@@ -449,13 +449,14 @@ const updateProfile = async (req, res) => {
  * @return {Object} : Logged-in user information {status, message, data}
  */
 const getLoggedInUserInfo = async (req, res) => {
+  const model = await models;
   try {
     const query = {
       id: req.user.id,
       isDeleted: false
     };
     query.isActive = true;
-    let result = await dbService.findOne(User,query);
+    let result = await dbService.findOne(model.account,query);
     if (!result) {
       return res.recordNotFound();
     }
