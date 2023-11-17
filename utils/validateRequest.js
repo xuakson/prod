@@ -12,6 +12,7 @@ const { FILTER_KEYS } = require('../constants/filterKeys');
  * @returns : returns validation with message {isValid, message}
  */
 exports.validateParamsWithJoi = (payload, schemaKeys) => {
+  console.log('^^^payload', payload);
   const { error } = schemaKeys.validate(payload, {
     abortEarly: false,
     convert: false,
