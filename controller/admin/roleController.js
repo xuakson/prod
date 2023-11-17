@@ -114,7 +114,7 @@ const findAllRole = async (req, res) => {
 const getRole = async (req, res) => {
   try { 
     let id = req.params.id;
-    let foundRole = await dbService.findOne(Role,{ id :id });
+    let foundRole = await dbService.findOne(await Role,{ id :id });
     if (!foundRole){
       return res.recordNotFound();
     }

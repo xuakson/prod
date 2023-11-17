@@ -8,10 +8,11 @@ const {
   Strategy, ExtractJwt 
 } = require('passport-jwt');
 const { JWT } = require('../constants/authConstant');
-const model = require('../model/index');
+const models = require('../model/index');
 const dbService = require('../utils/dbService');
 
 const devicePassportStrategy = async (passport) => {
+  const model = await models;
   const options = {};
   options.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
   options.secretOrKey = JWT.DEVICE_SECRET;

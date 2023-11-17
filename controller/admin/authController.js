@@ -82,6 +82,7 @@ const register = async (req, res) => {
    
     return  res.success({ data :result });
   } catch (error) {
+    console.log(error);
     return res.internalServerError({ message:error.message }); 
   }  
 };

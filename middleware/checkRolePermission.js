@@ -3,7 +3,7 @@
  * @description :: middleware that checks access of APIs for logged-in user
  */
 
-const model = require('../model');
+const models = require('../model');
 const dbService = require('../utils/dbService');
 const { replaceAll } = require('../utils/common');
 const { role } = require('../model');
@@ -16,6 +16,7 @@ const { role } = require('../model');
  */
 
 const checkRolePermission = async (req, res, next) => {
+  const model = await models;
   if (!req.user) {
     return res.unAuthorized({ message :'Authorization token required!' });
   } 

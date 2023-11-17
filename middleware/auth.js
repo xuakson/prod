@@ -7,7 +7,7 @@ const passport = require('passport');
 const {
   LOGIN_ACCESS,PLATFORM 
 } = require('../constants/authConstant');
-const model = require('../model');
+const models = require('../model');
 const dbService = require('../utils/dbService');
 
 /**
@@ -18,6 +18,12 @@ const dbService = require('../utils/dbService');
  * @param {int} platform : platform.
  */
 const verifyCallback = (req, resolve, reject, platform) => async (err, user, info) => {
+  console.log('^^^error:', err)
+  console.log('^^^user:', user)
+  console.log('^^^info:', info)
+
+  const model = await models;
+
   if (err || info || !user) {
     return reject('Unauthorized User');
   }
