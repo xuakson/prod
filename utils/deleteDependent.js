@@ -27,14 +27,14 @@ let dbService = require('.//dbService');
 
 const deleteActivity = async (filter) =>{
   try {
-    let activity = await dbService.findAll(Activity,filter);
+    let activity = await dbService.findAll(await Activity,filter);
     if (activity && activity.length){
       activity = activity.map((obj) => obj.id);
 
       const blogFilter = { $or: [{ idActivity : { $in : activity } }] };
-      const blogCnt = await dbService.destroy(Blog,blogFilter);
+      const blogCnt = await dbService.destroy(await Blog,blogFilter);
 
-      let deleted  = await dbService.destroy(Activity,filter);
+      let deleted  = await dbService.destroy(await Activity,filter);
       let response = { blog :blogCnt.length, };
       return response; 
     } else {
@@ -48,20 +48,20 @@ const deleteActivity = async (filter) =>{
 
 const deleteSubregion = async (filter) =>{
   try {
-    let subregion = await dbService.findAll(Subregion,filter);
+    let subregion = await dbService.findAll(await Subregion,filter);
     if (subregion && subregion.length){
       subregion = subregion.map((obj) => obj.id);
 
       const activityFilter = { $or: [{ idSubRegion : { $in : subregion } }] };
-      const activityCnt = await dbService.destroy(Activity,activityFilter);
+      const activityCnt = await dbService.destroy(await Activity,activityFilter);
 
       const nationFilter = { $or: [{ idSubRegion : { $in : subregion } }] };
-      const nationCnt = await dbService.destroy(Nation,nationFilter);
+      const nationCnt = await dbService.destroy(await Nation,nationFilter);
 
       const assetFilter = { $or: [{ idSubRegion : { $in : subregion } }] };
-      const assetCnt = await dbService.destroy(Asset,assetFilter);
+      const assetCnt = await dbService.destroy(await Asset,assetFilter);
 
-      let deleted  = await dbService.destroy(Subregion,filter);
+      let deleted  = await dbService.destroy(await Subregion,filter);
       let response = {
         activity :activityCnt.length,
         nation :nationCnt.length,
@@ -79,23 +79,23 @@ const deleteSubregion = async (filter) =>{
 
 const deleteRegion = async (filter) =>{
   try {
-    let region = await dbService.findAll(Region,filter);
+    let region = await dbService.findAll(await Region,filter);
     if (region && region.length){
       region = region.map((obj) => obj.id);
 
       const activityFilter = { $or: [{ idRegion : { $in : region } }] };
-      const activityCnt = await dbService.destroy(Activity,activityFilter);
+      const activityCnt = await dbService.destroy(await Activity,activityFilter);
 
       const subregionFilter = { $or: [{ idRegion : { $in : region } }] };
-      const subregionCnt = await dbService.destroy(Subregion,subregionFilter);
+      const subregionCnt = await dbService.destroy(await Subregion,subregionFilter);
 
       const nationFilter = { $or: [{ idRegion : { $in : region } }] };
-      const nationCnt = await dbService.destroy(Nation,nationFilter);
+      const nationCnt = await dbService.destroy(await Nation,nationFilter);
 
       const assetFilter = { $or: [{ idRegion : { $in : region } }] };
-      const assetCnt = await dbService.destroy(Asset,assetFilter);
+      const assetCnt = await dbService.destroy(await Asset,assetFilter);
 
-      let deleted  = await dbService.destroy(Region,filter);
+      let deleted  = await dbService.destroy(await Region,filter);
       let response = {
         activity :activityCnt.length,
         subregion :subregionCnt.length,
@@ -114,20 +114,20 @@ const deleteRegion = async (filter) =>{
 
 const deleteNation = async (filter) =>{
   try {
-    let nation = await dbService.findAll(Nation,filter);
+    let nation = await dbService.findAll(await Nation,filter);
     if (nation && nation.length){
       nation = nation.map((obj) => obj.id);
 
       const activityFilter = { $or: [{ idNation : { $in : nation } }] };
-      const activityCnt = await dbService.destroy(Activity,activityFilter);
+      const activityCnt = await dbService.destroy(await Activity,activityFilter);
 
       const assetFilter = { $or: [{ idNation : { $in : nation } }] };
-      const assetCnt = await dbService.destroy(Asset,assetFilter);
+      const assetCnt = await dbService.destroy(await Asset,assetFilter);
 
       const accountFilter = { $or: [{ idNation : { $in : nation } }] };
-      const accountCnt = await dbService.destroy(Account,accountFilter);
+      const accountCnt = await dbService.destroy(await Account,accountFilter);
 
-      let deleted  = await dbService.destroy(Nation,filter);
+      let deleted  = await dbService.destroy(await Nation,filter);
       let response = {
         activity :activityCnt.length,
         asset :assetCnt.length,
@@ -145,7 +145,7 @@ const deleteNation = async (filter) =>{
 
 const deleteLeader = async (filter) =>{
   try {
-    let response  = await dbService.destroy(Leader,filter);
+    let response  = await dbService.destroy(await Leader,filter);
     return response;
   } catch (error){
     throw new Error(error.message);
@@ -154,14 +154,14 @@ const deleteLeader = async (filter) =>{
 
 const deleteImage = async (filter) =>{
   try {
-    let image = await dbService.findAll(Image,filter);
+    let image = await dbService.findAll(await Image,filter);
     if (image && image.length){
       image = image.map((obj) => obj.id);
 
       const accountFilter = { $or: [{ idImage : { $in : image } }] };
-      const accountCnt = await dbService.destroy(Account,accountFilter);
+      const accountCnt = await dbService.destroy(await Account,accountFilter);
 
-      let deleted  = await dbService.destroy(Image,filter);
+      let deleted  = await dbService.destroy(await Image,filter);
       let response = { account :accountCnt.length, };
       return response; 
     } else {
@@ -175,7 +175,7 @@ const deleteImage = async (filter) =>{
 
 const deleteDonation = async (filter) =>{
   try {
-    let response  = await dbService.destroy(Donation,filter);
+    let response  = await dbService.destroy(await Donation,filter);
     return response;
   } catch (error){
     throw new Error(error.message);
@@ -184,7 +184,7 @@ const deleteDonation = async (filter) =>{
 
 const deleteContact = async (filter) =>{
   try {
-    let response  = await dbService.destroy(Contact,filter);
+    let response  = await dbService.destroy(await Contact,filter);
     return response;
   } catch (error){
     throw new Error(error.message);
@@ -193,14 +193,14 @@ const deleteContact = async (filter) =>{
 
 const deleteBlogcategory = async (filter) =>{
   try {
-    let blogcategory = await dbService.findAll(Blogcategory,filter);
+    let blogcategory = await dbService.findAll(await Blogcategory,filter);
     if (blogcategory && blogcategory.length){
       blogcategory = blogcategory.map((obj) => obj.id);
 
       const blogFilter = { $or: [{ idBlogCategory : { $in : blogcategory } }] };
-      const blogCnt = await dbService.destroy(Blog,blogFilter);
+      const blogCnt = await dbService.destroy(await Blog,blogFilter);
 
-      let deleted  = await dbService.destroy(Blogcategory,filter);
+      let deleted  = await dbService.destroy(await Blogcategory,filter);
       let response = { blog :blogCnt.length, };
       return response; 
     } else {
@@ -214,7 +214,7 @@ const deleteBlogcategory = async (filter) =>{
 
 const deleteBlog = async (filter) =>{
   try {
-    let response  = await dbService.destroy(Blog,filter);
+    let response  = await dbService.destroy(await Blog,filter);
     return response;
   } catch (error){
     throw new Error(error.message);
@@ -223,17 +223,17 @@ const deleteBlog = async (filter) =>{
 
 const deleteAssociation = async (filter) =>{
   try {
-    let association = await dbService.findAll(Association,filter);
+    let association = await dbService.findAll(await Association,filter);
     if (association && association.length){
       association = association.map((obj) => obj.id);
 
       const leaderFilter = { $or: [{ idAssociation : { $in : association } }] };
-      const leaderCnt = await dbService.destroy(Leader,leaderFilter);
+      const leaderCnt = await dbService.destroy(await Leader,leaderFilter);
 
       const accountFilter = { $or: [{ idAssociation : { $in : association } }] };
-      const accountCnt = await dbService.destroy(Account,accountFilter);
+      const accountCnt = await dbService.destroy(await Account,accountFilter);
 
-      let deleted  = await dbService.destroy(Association,filter);
+      let deleted  = await dbService.destroy(await Association,filter);
       let response = {
         leader :leaderCnt.length,
         account :accountCnt.length,
@@ -250,7 +250,7 @@ const deleteAssociation = async (filter) =>{
 
 const deleteAsset = async (filter) =>{
   try {
-    let response  = await dbService.destroy(Asset,filter);
+    let response  = await dbService.destroy(await Asset,filter);
     return response;
   } catch (error){
     throw new Error(error.message);
@@ -259,59 +259,59 @@ const deleteAsset = async (filter) =>{
 
 const deleteAccount = async (filter) =>{
   try {
-    let account = await dbService.findAll(Account,filter);
+    let account = await dbService.findAll(await Account,filter);
     if (account && account.length){
       account = account.map((obj) => obj.id);
 
       const activityFilter = { $or: [{ addedBy : { $in : account } },{ updatedBy : { $in : account } }] };
-      const activityCnt = await dbService.destroy(Activity,activityFilter);
+      const activityCnt = await dbService.destroy(await Activity,activityFilter);
 
       const subregionFilter = { $or: [{ addedBy : { $in : account } },{ updatedBy : { $in : account } }] };
-      const subregionCnt = await dbService.destroy(Subregion,subregionFilter);
+      const subregionCnt = await dbService.destroy(await Subregion,subregionFilter);
 
       const regionFilter = { $or: [{ addedBy : { $in : account } },{ updatedBy : { $in : account } }] };
-      const regionCnt = await dbService.destroy(Region,regionFilter);
+      const regionCnt = await dbService.destroy(await Region,regionFilter);
 
       const nationFilter = { $or: [{ addedBy : { $in : account } },{ updatedBy : { $in : account } }] };
-      const nationCnt = await dbService.destroy(Nation,nationFilter);
+      const nationCnt = await dbService.destroy(await Nation,nationFilter);
 
       const leaderFilter = { $or: [{ idAccount : { $in : account } },{ addedBy : { $in : account } },{ updatedBy : { $in : account } }] };
-      const leaderCnt = await dbService.destroy(Leader,leaderFilter);
+      const leaderCnt = await dbService.destroy(await Leader,leaderFilter);
 
       const imageFilter = { $or: [{ idAccount : { $in : account } },{ addedBy : { $in : account } },{ updatedBy : { $in : account } }] };
-      const imageCnt = await dbService.destroy(Image,imageFilter);
+      const imageCnt = await dbService.destroy(await Image,imageFilter);
 
       const donationFilter = { $or: [{ addedBy : { $in : account } },{ updatedBy : { $in : account } },{ idAccount : { $in : account } }] };
-      const donationCnt = await dbService.destroy(Donation,donationFilter);
+      const donationCnt = await dbService.destroy(await Donation,donationFilter);
 
       const contactFilter = { $or: [{ idAccount : { $in : account } },{ addedBy : { $in : account } },{ updatedBy : { $in : account } }] };
-      const contactCnt = await dbService.destroy(Contact,contactFilter);
+      const contactCnt = await dbService.destroy(await Contact,contactFilter);
 
       const blogcategoryFilter = { $or: [{ addedBy : { $in : account } },{ updatedBy : { $in : account } }] };
-      const blogcategoryCnt = await dbService.destroy(Blogcategory,blogcategoryFilter);
+      const blogcategoryCnt = await dbService.destroy(await Blogcategory,blogcategoryFilter);
 
       const blogFilter = { $or: [{ addedBy : { $in : account } },{ updatedBy : { $in : account } }] };
-      const blogCnt = await dbService.destroy(Blog,blogFilter);
+      const blogCnt = await dbService.destroy(await Blog,blogFilter);
 
       const associationFilter = { $or: [{ addedBy : { $in : account } },{ updatedBy : { $in : account } }] };
-      const associationCnt = await dbService.destroy(Association,associationFilter);
+      const associationCnt = await dbService.destroy(await Association,associationFilter);
 
       const assetFilter = { $or: [{ addedBy : { $in : account } },{ updatedBy : { $in : account } }] };
-      const assetCnt = await dbService.destroy(Asset,assetFilter);
+      const assetCnt = await dbService.destroy(await Asset,assetFilter);
 
       const accountFilter = { $or: [{ addedBy : { $in : account } },{ updatedBy : { $in : account } }] };
-      const accountCnt = await dbService.destroy(Account,accountFilter);
+      const accountCnt = await dbService.destroy(await Account,accountFilter);
 
       const userAuthSettingsFilter = { $or: [{ userId : { $in : account } },{ addedBy : { $in : account } },{ updatedBy : { $in : account } }] };
-      const userAuthSettingsCnt = await dbService.destroy(UserAuthSettings,userAuthSettingsFilter);
+      const userAuthSettingsCnt = await dbService.destroy(await UserAuthSettings,userAuthSettingsFilter);
 
       const userTokensFilter = { $or: [{ userId : { $in : account } },{ addedBy : { $in : account } },{ updatedBy : { $in : account } }] };
-      const userTokensCnt = await dbService.destroy(UserTokens,userTokensFilter);
+      const userTokensCnt = await dbService.destroy(await UserTokens,userTokensFilter);
 
       const userRoleFilter = { $or: [{ userId : { $in : account } }] };
-      const userRoleCnt = await dbService.destroy(UserRole,userRoleFilter);
+      const userRoleCnt = await dbService.destroy(await UserRole,userRoleFilter);
 
-      let deleted  = await dbService.destroy(Account,filter);
+      let deleted  = await dbService.destroy(await Account,filter);
       let response = {
         activity :activityCnt.length,
         subregion :subregionCnt.length,
@@ -342,7 +342,7 @@ const deleteAccount = async (filter) =>{
 
 const deleteUserAuthSettings = async (filter) =>{
   try {
-    let response  = await dbService.destroy(UserAuthSettings,filter);
+    let response  = await dbService.destroy(await UserAuthSettings,filter);
     return response;
   } catch (error){
     throw new Error(error.message);
@@ -351,7 +351,7 @@ const deleteUserAuthSettings = async (filter) =>{
 
 const deleteUserTokens = async (filter) =>{
   try {
-    let response  = await dbService.destroy(UserTokens,filter);
+    let response  = await dbService.destroy(await UserTokens,filter);
     return response;
   } catch (error){
     throw new Error(error.message);
@@ -377,7 +377,7 @@ const deleteRole = async (filter) =>{
       const routeRoleCnt = await dbService.destroy(RouteRole,routeRoleFilter);
 
       const userRoleFilter = { $or: [{ roleId : { $in : role } }] };
-      const userRoleCnt = await dbService.destroy(UserRole,userRoleFilter);
+      const userRoleCnt = await dbService.destroy(await UserRole,userRoleFilter);
 
       let deleted  = await dbService.destroy(Role,filter);
       let response = {
@@ -426,7 +426,7 @@ const deleteRouteRole = async (filter) =>{
 
 const deleteUserRole = async (filter) =>{
   try {
-    let response  = await dbService.destroy(UserRole,filter);
+    let response  = await dbService.destroy(await UserRole,filter);
     return response;
   } catch (error){
     throw new Error(error.message);
@@ -435,12 +435,12 @@ const deleteUserRole = async (filter) =>{
 
 const countActivity = async (filter) =>{
   try {
-    let activity = await dbService.findAll(Activity,filter);
+    let activity = await dbService.findAll(await Activity,filter);
     if (activity && activity.length){
       activity = activity.map((obj) => obj.id);
 
       const blogFilter = { $or: [{ idActivity : { $in : activity } }] };
-      const blogCnt =  await dbService.count(Blog,blogFilter);
+      const blogCnt =  await dbService.count(await Blog,blogFilter);
 
       let response = { blog : blogCnt, };
       return response; 
@@ -454,18 +454,18 @@ const countActivity = async (filter) =>{
 
 const countSubregion = async (filter) =>{
   try {
-    let subregion = await dbService.findAll(Subregion,filter);
+    let subregion = await dbService.findAll(await Subregion,filter);
     if (subregion && subregion.length){
       subregion = subregion.map((obj) => obj.id);
 
       const activityFilter = { $or: [{ idSubRegion : { $in : subregion } }] };
-      const activityCnt =  await dbService.count(Activity,activityFilter);
+      const activityCnt =  await dbService.count(await Activity,activityFilter);
 
       const nationFilter = { $or: [{ idSubRegion : { $in : subregion } }] };
-      const nationCnt =  await dbService.count(Nation,nationFilter);
+      const nationCnt =  await dbService.count(await Nation,nationFilter);
 
       const assetFilter = { $or: [{ idSubRegion : { $in : subregion } }] };
-      const assetCnt =  await dbService.count(Asset,assetFilter);
+      const assetCnt =  await dbService.count(await Asset,assetFilter);
 
       let response = {
         activity : activityCnt,
@@ -483,21 +483,21 @@ const countSubregion = async (filter) =>{
 
 const countRegion = async (filter) =>{
   try {
-    let region = await dbService.findAll(Region,filter);
+    let region = await dbService.findAll(await Region,filter);
     if (region && region.length){
       region = region.map((obj) => obj.id);
 
       const activityFilter = { $or: [{ idRegion : { $in : region } }] };
-      const activityCnt =  await dbService.count(Activity,activityFilter);
+      const activityCnt =  await dbService.count(await Activity,activityFilter);
 
       const subregionFilter = { $or: [{ idRegion : { $in : region } }] };
-      const subregionCnt =  await dbService.count(Subregion,subregionFilter);
+      const subregionCnt =  await dbService.count(await Subregion,subregionFilter);
 
       const nationFilter = { $or: [{ idRegion : { $in : region } }] };
-      const nationCnt =  await dbService.count(Nation,nationFilter);
+      const nationCnt =  await dbService.count(await Nation,nationFilter);
 
       const assetFilter = { $or: [{ idRegion : { $in : region } }] };
-      const assetCnt =  await dbService.count(Asset,assetFilter);
+      const assetCnt =  await dbService.count(await Asset,assetFilter);
 
       let response = {
         activity : activityCnt,
@@ -516,18 +516,18 @@ const countRegion = async (filter) =>{
 
 const countNation = async (filter) =>{
   try {
-    let nation = await dbService.findAll(Nation,filter);
+    let nation = await dbService.findAll(await Nation,filter);
     if (nation && nation.length){
       nation = nation.map((obj) => obj.id);
 
       const activityFilter = { $or: [{ idNation : { $in : nation } }] };
-      const activityCnt =  await dbService.count(Activity,activityFilter);
+      const activityCnt =  await dbService.count(await Activity,activityFilter);
 
       const assetFilter = { $or: [{ idNation : { $in : nation } }] };
-      const assetCnt =  await dbService.count(Asset,assetFilter);
+      const assetCnt =  await dbService.count(await Asset,assetFilter);
 
       const accountFilter = { $or: [{ idNation : { $in : nation } }] };
-      const accountCnt =  await dbService.count(Account,accountFilter);
+      const accountCnt =  await dbService.count(await Account,accountFilter);
 
       let response = {
         activity : activityCnt,
@@ -545,7 +545,7 @@ const countNation = async (filter) =>{
 
 const countLeader = async (filter) =>{
   try {
-    const leaderCnt =  await dbService.count(Leader,filter);
+    const leaderCnt =  await dbService.count(await Leader,filter);
     return { leader : leaderCnt };
   } catch (error){
     throw new Error(error.message);
@@ -554,12 +554,12 @@ const countLeader = async (filter) =>{
 
 const countImage = async (filter) =>{
   try {
-    let image = await dbService.findAll(Image,filter);
+    let image = await dbService.findAll(await Image,filter);
     if (image && image.length){
       image = image.map((obj) => obj.id);
 
       const accountFilter = { $or: [{ idImage : { $in : image } }] };
-      const accountCnt =  await dbService.count(Account,accountFilter);
+      const accountCnt =  await dbService.count(await Account,accountFilter);
 
       let response = { account : accountCnt, };
       return response; 
@@ -573,7 +573,7 @@ const countImage = async (filter) =>{
 
 const countDonation = async (filter) =>{
   try {
-    const donationCnt =  await dbService.count(Donation,filter);
+    const donationCnt =  await dbService.count(await Donation,filter);
     return { donation : donationCnt };
   } catch (error){
     throw new Error(error.message);
@@ -582,7 +582,7 @@ const countDonation = async (filter) =>{
 
 const countContact = async (filter) =>{
   try {
-    const contactCnt =  await dbService.count(Contact,filter);
+    const contactCnt =  await dbService.count(await Contact,filter);
     return { contact : contactCnt };
   } catch (error){
     throw new Error(error.message);
@@ -591,12 +591,12 @@ const countContact = async (filter) =>{
 
 const countBlogcategory = async (filter) =>{
   try {
-    let blogcategory = await dbService.findAll(Blogcategory,filter);
+    let blogcategory = await dbService.findAll(await Blogcategory,filter);
     if (blogcategory && blogcategory.length){
       blogcategory = blogcategory.map((obj) => obj.id);
 
       const blogFilter = { $or: [{ idBlogCategory : { $in : blogcategory } }] };
-      const blogCnt =  await dbService.count(Blog,blogFilter);
+      const blogCnt =  await dbService.count(await Blog,blogFilter);
 
       let response = { blog : blogCnt, };
       return response; 
@@ -610,7 +610,7 @@ const countBlogcategory = async (filter) =>{
 
 const countBlog = async (filter) =>{
   try {
-    const blogCnt =  await dbService.count(Blog,filter);
+    const blogCnt =  await dbService.count(await Blog,filter);
     return { blog : blogCnt };
   } catch (error){
     throw new Error(error.message);
@@ -619,15 +619,15 @@ const countBlog = async (filter) =>{
 
 const countAssociation = async (filter) =>{
   try {
-    let association = await dbService.findAll(Association,filter);
+    let association = await dbService.findAll(await Association,filter);
     if (association && association.length){
       association = association.map((obj) => obj.id);
 
       const leaderFilter = { $or: [{ idAssociation : { $in : association } }] };
-      const leaderCnt =  await dbService.count(Leader,leaderFilter);
+      const leaderCnt =  await dbService.count(await Leader,leaderFilter);
 
       const accountFilter = { $or: [{ idAssociation : { $in : association } }] };
-      const accountCnt =  await dbService.count(Account,accountFilter);
+      const accountCnt =  await dbService.count(await Account,accountFilter);
 
       let response = {
         leader : leaderCnt,
@@ -644,7 +644,7 @@ const countAssociation = async (filter) =>{
 
 const countAsset = async (filter) =>{
   try {
-    const assetCnt =  await dbService.count(Asset,filter);
+    const assetCnt =  await dbService.count(await Asset,filter);
     return { asset : assetCnt };
   } catch (error){
     throw new Error(error.message);
@@ -653,57 +653,57 @@ const countAsset = async (filter) =>{
 
 const countAccount = async (filter) =>{
   try {
-    let account = await dbService.findAll(Account,filter);
+    let account = await dbService.findAll(await Account,filter);
     if (account && account.length){
       account = account.map((obj) => obj.id);
 
       const activityFilter = { $or: [{ addedBy : { $in : account } },{ updatedBy : { $in : account } }] };
-      const activityCnt =  await dbService.count(Activity,activityFilter);
+      const activityCnt =  await dbService.count(await Activity,activityFilter);
 
       const subregionFilter = { $or: [{ addedBy : { $in : account } },{ updatedBy : { $in : account } }] };
-      const subregionCnt =  await dbService.count(Subregion,subregionFilter);
+      const subregionCnt =  await dbService.count(await Subregion,subregionFilter);
 
       const regionFilter = { $or: [{ addedBy : { $in : account } },{ updatedBy : { $in : account } }] };
-      const regionCnt =  await dbService.count(Region,regionFilter);
+      const regionCnt =  await dbService.count(await Region,regionFilter);
 
       const nationFilter = { $or: [{ addedBy : { $in : account } },{ updatedBy : { $in : account } }] };
-      const nationCnt =  await dbService.count(Nation,nationFilter);
+      const nationCnt =  await dbService.count(await Nation,nationFilter);
 
       const leaderFilter = { $or: [{ idAccount : { $in : account } },{ addedBy : { $in : account } },{ updatedBy : { $in : account } }] };
-      const leaderCnt =  await dbService.count(Leader,leaderFilter);
+      const leaderCnt =  await dbService.count(await Leader,leaderFilter);
 
       const imageFilter = { $or: [{ idAccount : { $in : account } },{ addedBy : { $in : account } },{ updatedBy : { $in : account } }] };
-      const imageCnt =  await dbService.count(Image,imageFilter);
+      const imageCnt =  await dbService.count(await Image,imageFilter);
 
       const donationFilter = { $or: [{ addedBy : { $in : account } },{ updatedBy : { $in : account } },{ idAccount : { $in : account } }] };
-      const donationCnt =  await dbService.count(Donation,donationFilter);
+      const donationCnt =  await dbService.count(await Donation,donationFilter);
 
       const contactFilter = { $or: [{ idAccount : { $in : account } },{ addedBy : { $in : account } },{ updatedBy : { $in : account } }] };
-      const contactCnt =  await dbService.count(Contact,contactFilter);
+      const contactCnt =  await dbService.count(await Contact,contactFilter);
 
       const blogcategoryFilter = { $or: [{ addedBy : { $in : account } },{ updatedBy : { $in : account } }] };
-      const blogcategoryCnt =  await dbService.count(Blogcategory,blogcategoryFilter);
+      const blogcategoryCnt =  await dbService.count(await Blogcategory,blogcategoryFilter);
 
       const blogFilter = { $or: [{ addedBy : { $in : account } },{ updatedBy : { $in : account } }] };
-      const blogCnt =  await dbService.count(Blog,blogFilter);
+      const blogCnt =  await dbService.count(await Blog,blogFilter);
 
       const associationFilter = { $or: [{ addedBy : { $in : account } },{ updatedBy : { $in : account } }] };
-      const associationCnt =  await dbService.count(Association,associationFilter);
+      const associationCnt =  await dbService.count(await Association,associationFilter);
 
       const assetFilter = { $or: [{ addedBy : { $in : account } },{ updatedBy : { $in : account } }] };
-      const assetCnt =  await dbService.count(Asset,assetFilter);
+      const assetCnt =  await dbService.count(await Asset,assetFilter);
 
       const accountFilter = { $or: [{ addedBy : { $in : account } },{ updatedBy : { $in : account } }] };
-      const accountCnt =  await dbService.count(Account,accountFilter);
+      const accountCnt =  await dbService.count(await Account,accountFilter);
 
       const userAuthSettingsFilter = { $or: [{ userId : { $in : account } },{ addedBy : { $in : account } },{ updatedBy : { $in : account } }] };
-      const userAuthSettingsCnt =  await dbService.count(UserAuthSettings,userAuthSettingsFilter);
+      const userAuthSettingsCnt =  await dbService.count(await UserAuthSettings,userAuthSettingsFilter);
 
       const userTokensFilter = { $or: [{ userId : { $in : account } },{ addedBy : { $in : account } },{ updatedBy : { $in : account } }] };
-      const userTokensCnt =  await dbService.count(UserTokens,userTokensFilter);
+      const userTokensCnt =  await dbService.count(await UserTokens,userTokensFilter);
 
       const userRoleFilter = { $or: [{ userId : { $in : account } }] };
-      const userRoleCnt =  await dbService.count(UserRole,userRoleFilter);
+      const userRoleCnt =  await dbService.count(await UserRole,userRoleFilter);
 
       let response = {
         activity : activityCnt,
@@ -734,7 +734,7 @@ const countAccount = async (filter) =>{
 
 const countUserAuthSettings = async (filter) =>{
   try {
-    const userAuthSettingsCnt =  await dbService.count(UserAuthSettings,filter);
+    const userAuthSettingsCnt =  await dbService.count(await UserAuthSettings,filter);
     return { userAuthSettings : userAuthSettingsCnt };
   } catch (error){
     throw new Error(error.message);
@@ -743,7 +743,7 @@ const countUserAuthSettings = async (filter) =>{
 
 const countUserTokens = async (filter) =>{
   try {
-    const userTokensCnt =  await dbService.count(UserTokens,filter);
+    const userTokensCnt =  await dbService.count(await UserTokens,filter);
     return { userTokens : userTokensCnt };
   } catch (error){
     throw new Error(error.message);
@@ -769,7 +769,7 @@ const countRole = async (filter) =>{
       const routeRoleCnt =  await dbService.count(RouteRole,routeRoleFilter);
 
       const userRoleFilter = { $or: [{ roleId : { $in : role } }] };
-      const userRoleCnt =  await dbService.count(UserRole,userRoleFilter);
+      const userRoleCnt =  await dbService.count(await UserRole,userRoleFilter);
 
       let response = {
         routeRole : routeRoleCnt,
@@ -814,7 +814,7 @@ const countRouteRole = async (filter) =>{
 
 const countUserRole = async (filter) =>{
   try {
-    const userRoleCnt =  await dbService.count(UserRole,filter);
+    const userRoleCnt =  await dbService.count(await UserRole,filter);
     return { userRole : userRoleCnt };
   } catch (error){
     throw new Error(error.message);
@@ -823,13 +823,13 @@ const countUserRole = async (filter) =>{
 
 const softDeleteActivity = async (filter,updateBody) =>{  
   try {
-    let activity = await dbService.findAll(Activity,filter, { id:1 });
+    let activity = await dbService.findAll(await Activity,filter, { id:1 });
     if (activity.length){
       activity = activity.map((obj) => obj.id);
 
       const blogFilter = { '$or': [{ idActivity : { '$in' : activity } }] };
-      const blogCnt = await dbService.update(Blog,blogFilter,updateBody);
-      let updated = await dbService.update(Activity,filter,updateBody);
+      const blogCnt = await dbService.update(await Blog,blogFilter,updateBody);
+      let updated = await dbService.update(await Activity,filter,updateBody);
 
       let response = { blog :blogCnt.length, };
       return response;
@@ -843,19 +843,19 @@ const softDeleteActivity = async (filter,updateBody) =>{
 
 const softDeleteSubregion = async (filter,updateBody) =>{  
   try {
-    let subregion = await dbService.findAll(Subregion,filter, { id:1 });
+    let subregion = await dbService.findAll(await Subregion,filter, { id:1 });
     if (subregion.length){
       subregion = subregion.map((obj) => obj.id);
 
       const activityFilter = { '$or': [{ idSubRegion : { '$in' : subregion } }] };
-      const activityCnt = await dbService.update(Activity,activityFilter,updateBody);
+      const activityCnt = await dbService.update(await Activity,activityFilter,updateBody);
 
       const nationFilter = { '$or': [{ idSubRegion : { '$in' : subregion } }] };
-      const nationCnt = await dbService.update(Nation,nationFilter,updateBody);
+      const nationCnt = await dbService.update(await Nation,nationFilter,updateBody);
 
       const assetFilter = { '$or': [{ idSubRegion : { '$in' : subregion } }] };
-      const assetCnt = await dbService.update(Asset,assetFilter,updateBody);
-      let updated = await dbService.update(Subregion,filter,updateBody);
+      const assetCnt = await dbService.update(await Asset,assetFilter,updateBody);
+      let updated = await dbService.update(await Subregion,filter,updateBody);
 
       let response = {
         activity :activityCnt.length,
@@ -873,22 +873,22 @@ const softDeleteSubregion = async (filter,updateBody) =>{
 
 const softDeleteRegion = async (filter,updateBody) =>{  
   try {
-    let region = await dbService.findAll(Region,filter, { id:1 });
+    let region = await dbService.findAll(await Region,filter, { id:1 });
     if (region.length){
       region = region.map((obj) => obj.id);
 
       const activityFilter = { '$or': [{ idRegion : { '$in' : region } }] };
-      const activityCnt = await dbService.update(Activity,activityFilter,updateBody);
+      const activityCnt = await dbService.update(await Activity,activityFilter,updateBody);
 
       const subregionFilter = { '$or': [{ idRegion : { '$in' : region } }] };
-      const subregionCnt = await dbService.update(Subregion,subregionFilter,updateBody);
+      const subregionCnt = await dbService.update(await Subregion,subregionFilter,updateBody);
 
       const nationFilter = { '$or': [{ idRegion : { '$in' : region } }] };
-      const nationCnt = await dbService.update(Nation,nationFilter,updateBody);
+      const nationCnt = await dbService.update(await Nation,nationFilter,updateBody);
 
       const assetFilter = { '$or': [{ idRegion : { '$in' : region } }] };
-      const assetCnt = await dbService.update(Asset,assetFilter,updateBody);
-      let updated = await dbService.update(Region,filter,updateBody);
+      const assetCnt = await dbService.update(await Asset,assetFilter,updateBody);
+      let updated = await dbService.update(await Region,filter,updateBody);
 
       let response = {
         activity :activityCnt.length,
@@ -907,19 +907,19 @@ const softDeleteRegion = async (filter,updateBody) =>{
 
 const softDeleteNation = async (filter,updateBody) =>{  
   try {
-    let nation = await dbService.findAll(Nation,filter, { id:1 });
+    let nation = await dbService.findAll(await Nation,filter, { id:1 });
     if (nation.length){
       nation = nation.map((obj) => obj.id);
 
       const activityFilter = { '$or': [{ idNation : { '$in' : nation } }] };
-      const activityCnt = await dbService.update(Activity,activityFilter,updateBody);
+      const activityCnt = await dbService.update(await Activity,activityFilter,updateBody);
 
       const assetFilter = { '$or': [{ idNation : { '$in' : nation } }] };
-      const assetCnt = await dbService.update(Asset,assetFilter,updateBody);
+      const assetCnt = await dbService.update(await Asset,assetFilter,updateBody);
 
       const accountFilter = { '$or': [{ idNation : { '$in' : nation } }] };
-      const accountCnt = await dbService.update(Account,accountFilter,updateBody);
-      let updated = await dbService.update(Nation,filter,updateBody);
+      const accountCnt = await dbService.update(await Account,accountFilter,updateBody);
+      let updated = await dbService.update(await Nation,filter,updateBody);
 
       let response = {
         activity :activityCnt.length,
@@ -937,7 +937,7 @@ const softDeleteNation = async (filter,updateBody) =>{
 
 const softDeleteLeader = async (filter,updateBody) =>{  
   try {
-    const leaderCnt =  await dbService.update(Leader,filter);
+    const leaderCnt =  await dbService.update(await Leader,filter);
     return { leader : leaderCnt };
   } catch (error){
     throw new Error(error.message);
@@ -946,13 +946,13 @@ const softDeleteLeader = async (filter,updateBody) =>{
 
 const softDeleteImage = async (filter,updateBody) =>{  
   try {
-    let image = await dbService.findAll(Image,filter, { id:1 });
+    let image = await dbService.findAll(await Image,filter, { id:1 });
     if (image.length){
       image = image.map((obj) => obj.id);
 
       const accountFilter = { '$or': [{ idImage : { '$in' : image } }] };
-      const accountCnt = await dbService.update(Account,accountFilter,updateBody);
-      let updated = await dbService.update(Image,filter,updateBody);
+      const accountCnt = await dbService.update(await Account,accountFilter,updateBody);
+      let updated = await dbService.update(await Image,filter,updateBody);
 
       let response = { account :accountCnt.length, };
       return response;
@@ -966,7 +966,7 @@ const softDeleteImage = async (filter,updateBody) =>{
 
 const softDeleteDonation = async (filter,updateBody) =>{  
   try {
-    const donationCnt =  await dbService.update(Donation,filter);
+    const donationCnt =  await dbService.update(await Donation,filter);
     return { donation : donationCnt };
   } catch (error){
     throw new Error(error.message);
@@ -975,7 +975,7 @@ const softDeleteDonation = async (filter,updateBody) =>{
 
 const softDeleteContact = async (filter,updateBody) =>{  
   try {
-    const contactCnt =  await dbService.update(Contact,filter);
+    const contactCnt =  await dbService.update(await Contact,filter);
     return { contact : contactCnt };
   } catch (error){
     throw new Error(error.message);
@@ -984,13 +984,13 @@ const softDeleteContact = async (filter,updateBody) =>{
 
 const softDeleteBlogcategory = async (filter,updateBody) =>{  
   try {
-    let blogcategory = await dbService.findAll(Blogcategory,filter, { id:1 });
+    let blogcategory = await dbService.findAll(await Blogcategory,filter, { id:1 });
     if (blogcategory.length){
       blogcategory = blogcategory.map((obj) => obj.id);
 
       const blogFilter = { '$or': [{ idBlogCategory : { '$in' : blogcategory } }] };
-      const blogCnt = await dbService.update(Blog,blogFilter,updateBody);
-      let updated = await dbService.update(Blogcategory,filter,updateBody);
+      const blogCnt = await dbService.update(await Blog,blogFilter,updateBody);
+      let updated = await dbService.update(await Blogcategory,filter,updateBody);
 
       let response = { blog :blogCnt.length, };
       return response;
@@ -1004,7 +1004,7 @@ const softDeleteBlogcategory = async (filter,updateBody) =>{
 
 const softDeleteBlog = async (filter,updateBody) =>{  
   try {
-    const blogCnt =  await dbService.update(Blog,filter);
+    const blogCnt =  await dbService.update(await Blog,filter);
     return { blog : blogCnt };
   } catch (error){
     throw new Error(error.message);
@@ -1013,16 +1013,16 @@ const softDeleteBlog = async (filter,updateBody) =>{
 
 const softDeleteAssociation = async (filter,updateBody) =>{  
   try {
-    let association = await dbService.findAll(Association,filter, { id:1 });
+    let association = await dbService.findAll(await Association,filter, { id:1 });
     if (association.length){
       association = association.map((obj) => obj.id);
 
       const leaderFilter = { '$or': [{ idAssociation : { '$in' : association } }] };
-      const leaderCnt = await dbService.update(Leader,leaderFilter,updateBody);
+      const leaderCnt = await dbService.update(await Leader,leaderFilter,updateBody);
 
       const accountFilter = { '$or': [{ idAssociation : { '$in' : association } }] };
-      const accountCnt = await dbService.update(Account,accountFilter,updateBody);
-      let updated = await dbService.update(Association,filter,updateBody);
+      const accountCnt = await dbService.update(await Account,accountFilter,updateBody);
+      let updated = await dbService.update(await Association,filter,updateBody);
 
       let response = {
         leader :leaderCnt.length,
@@ -1039,7 +1039,7 @@ const softDeleteAssociation = async (filter,updateBody) =>{
 
 const softDeleteAsset = async (filter,updateBody) =>{  
   try {
-    const assetCnt =  await dbService.update(Asset,filter);
+    const assetCnt =  await dbService.update(await Asset,filter);
     return { asset : assetCnt };
   } catch (error){
     throw new Error(error.message);
@@ -1048,58 +1048,58 @@ const softDeleteAsset = async (filter,updateBody) =>{
 
 const softDeleteAccount = async (filter,updateBody) =>{  
   try {
-    let account = await dbService.findAll(Account,filter, { id:1 });
+    let account = await dbService.findAll(await Account,filter, { id:1 });
     if (account.length){
       account = account.map((obj) => obj.id);
 
       const activityFilter = { '$or': [{ addedBy : { '$in' : account } },{ updatedBy : { '$in' : account } }] };
-      const activityCnt = await dbService.update(Activity,activityFilter,updateBody);
+      const activityCnt = await dbService.update(await Activity,activityFilter,updateBody);
 
       const subregionFilter = { '$or': [{ addedBy : { '$in' : account } },{ updatedBy : { '$in' : account } }] };
-      const subregionCnt = await dbService.update(Subregion,subregionFilter,updateBody);
+      const subregionCnt = await dbService.update(await Subregion,subregionFilter,updateBody);
 
       const regionFilter = { '$or': [{ addedBy : { '$in' : account } },{ updatedBy : { '$in' : account } }] };
-      const regionCnt = await dbService.update(Region,regionFilter,updateBody);
+      const regionCnt = await dbService.update(await Region,regionFilter,updateBody);
 
       const nationFilter = { '$or': [{ addedBy : { '$in' : account } },{ updatedBy : { '$in' : account } }] };
-      const nationCnt = await dbService.update(Nation,nationFilter,updateBody);
+      const nationCnt = await dbService.update(await Nation,nationFilter,updateBody);
 
       const leaderFilter = { '$or': [{ idAccount : { '$in' : account } },{ addedBy : { '$in' : account } },{ updatedBy : { '$in' : account } }] };
-      const leaderCnt = await dbService.update(Leader,leaderFilter,updateBody);
+      const leaderCnt = await dbService.update(await Leader,leaderFilter,updateBody);
 
       const imageFilter = { '$or': [{ idAccount : { '$in' : account } },{ addedBy : { '$in' : account } },{ updatedBy : { '$in' : account } }] };
-      const imageCnt = await dbService.update(Image,imageFilter,updateBody);
+      const imageCnt = await dbService.update(await Image,imageFilter,updateBody);
 
       const donationFilter = { '$or': [{ addedBy : { '$in' : account } },{ updatedBy : { '$in' : account } },{ idAccount : { '$in' : account } }] };
-      const donationCnt = await dbService.update(Donation,donationFilter,updateBody);
+      const donationCnt = await dbService.update(await Donation,donationFilter,updateBody);
 
       const contactFilter = { '$or': [{ idAccount : { '$in' : account } },{ addedBy : { '$in' : account } },{ updatedBy : { '$in' : account } }] };
-      const contactCnt = await dbService.update(Contact,contactFilter,updateBody);
+      const contactCnt = await dbService.update(await Contact,contactFilter,updateBody);
 
       const blogcategoryFilter = { '$or': [{ addedBy : { '$in' : account } },{ updatedBy : { '$in' : account } }] };
-      const blogcategoryCnt = await dbService.update(Blogcategory,blogcategoryFilter,updateBody);
+      const blogcategoryCnt = await dbService.update(await Blogcategory,blogcategoryFilter,updateBody);
 
       const blogFilter = { '$or': [{ addedBy : { '$in' : account } },{ updatedBy : { '$in' : account } }] };
-      const blogCnt = await dbService.update(Blog,blogFilter,updateBody);
+      const blogCnt = await dbService.update(await Blog,blogFilter,updateBody);
 
       const associationFilter = { '$or': [{ addedBy : { '$in' : account } },{ updatedBy : { '$in' : account } }] };
-      const associationCnt = await dbService.update(Association,associationFilter,updateBody);
+      const associationCnt = await dbService.update(await Association,associationFilter,updateBody);
 
       const assetFilter = { '$or': [{ addedBy : { '$in' : account } },{ updatedBy : { '$in' : account } }] };
-      const assetCnt = await dbService.update(Asset,assetFilter,updateBody);
+      const assetCnt = await dbService.update(await Asset,assetFilter,updateBody);
 
       const accountFilter = { '$or': [{ addedBy : { '$in' : account } },{ updatedBy : { '$in' : account } }] };
-      const accountCnt = await dbService.update(Account,accountFilter,updateBody);
+      const accountCnt = await dbService.update(await Account,accountFilter,updateBody);
 
       const userAuthSettingsFilter = { '$or': [{ userId : { '$in' : account } },{ addedBy : { '$in' : account } },{ updatedBy : { '$in' : account } }] };
-      const userAuthSettingsCnt = await dbService.update(UserAuthSettings,userAuthSettingsFilter,updateBody);
+      const userAuthSettingsCnt = await dbService.update(await UserAuthSettings,userAuthSettingsFilter,updateBody);
 
       const userTokensFilter = { '$or': [{ userId : { '$in' : account } },{ addedBy : { '$in' : account } },{ updatedBy : { '$in' : account } }] };
-      const userTokensCnt = await dbService.update(UserTokens,userTokensFilter,updateBody);
+      const userTokensCnt = await dbService.update(await UserTokens,userTokensFilter,updateBody);
 
       const userRoleFilter = { '$or': [{ userId : { '$in' : account } }] };
-      const userRoleCnt = await dbService.update(UserRole,userRoleFilter,updateBody);
-      let updated = await dbService.update(Account,filter,updateBody);
+      const userRoleCnt = await dbService.update(await UserRole,userRoleFilter,updateBody);
+      let updated = await dbService.update(await Account,filter,updateBody);
 
       let response = {
         activity :activityCnt.length,
@@ -1130,7 +1130,7 @@ const softDeleteAccount = async (filter,updateBody) =>{
 
 const softDeleteUserAuthSettings = async (filter,updateBody) =>{  
   try {
-    const userAuthSettingsCnt =  await dbService.update(UserAuthSettings,filter);
+    const userAuthSettingsCnt =  await dbService.update(await UserAuthSettings,filter);
     return { userAuthSettings : userAuthSettingsCnt };
   } catch (error){
     throw new Error(error.message);
@@ -1139,7 +1139,7 @@ const softDeleteUserAuthSettings = async (filter,updateBody) =>{
 
 const softDeleteUserTokens = async (filter,updateBody) =>{  
   try {
-    const userTokensCnt =  await dbService.update(UserTokens,filter);
+    const userTokensCnt =  await dbService.update(await UserTokens,filter);
     return { userTokens : userTokensCnt };
   } catch (error){
     throw new Error(error.message);
@@ -1165,7 +1165,7 @@ const softDeleteRole = async (filter,updateBody) =>{
       const routeRoleCnt = await dbService.update(RouteRole,routeRoleFilter,updateBody);
 
       const userRoleFilter = { '$or': [{ roleId : { '$in' : role } }] };
-      const userRoleCnt = await dbService.update(UserRole,userRoleFilter,updateBody);
+      const userRoleCnt = await dbService.update(await UserRole,userRoleFilter,updateBody);
       let updated = await dbService.update(Role,filter,updateBody);
 
       let response = {
@@ -1212,7 +1212,7 @@ const softDeleteRouteRole = async (filter,updateBody) =>{
 
 const softDeleteUserRole = async (filter,updateBody) =>{  
   try {
-    const userRoleCnt =  await dbService.update(UserRole,filter);
+    const userRoleCnt =  await dbService.update(await UserRole,filter);
     return { userRole : userRoleCnt };
   } catch (error){
     throw new Error(error.message);

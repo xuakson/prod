@@ -8,40 +8,53 @@ const models = require('../model');
 const OPERATORS = ['$and', '$or', '$like', '$in', '$eq', '$gt', '$lt', '$gte', '$lte', '$any', '$between'];
 
 // create one record
-const createOne = async (model, data) => model.create(data);
+const createOne = async (model, data) => {
+  const m = await model;
+  return m.create(data)
+};
 
 // create multiple records
-const createMany = async (model, data, options = { validate: true }) => model.bulkCreate(data, options);
+const createMany = async (model, data, options = { validate: true }) => {
+  const m = await model;
+  return m.bulkCreate(data, options)
+};
 
 // update record(s) when query matches
 const update = async (model, query, data) => {
+  const m = await model;
   query = queryBuilderParser(query);
-  let result = await model.update(data, { where: query });
-  result = await model.findAll({ where: query });
+  let result = await m.update(data, { where: query });
+  result = await m.findAll({ where: query });
   return result;
 };
 
 // delete record(s) when query matches
 const destroy = async (model, query) => {
+  const m = await model;
   query = queryBuilderParser(query);
-  const result = await model.findAll({ where: query });
-  await model.destroy({ where: query });
+  const result = await m.findAll({ where: query });
+  await m.destroy({ where: query });
   return result;
 };
 
 // delete record using primary key
-const deleteByPk = async (model, pk) => model.destroy({ where: { [model.primaryKeyField]: pk } });
+const deleteByPk = async (model, pk) => {
+  const m = await model;
+  return m.destroy({ where: { [m.primaryKeyField]: pk } });
+}
 
 // find single record
 const findOne = async (model, query, options = {}) => {
+  const m = await model;
   query = queryBuilderParser(query);
-  return model.findOne({
+  return m.findOne({
     where: query,
     options,
   });
 };
 // find multiple records with pagination
 const paginate = async (model, query, options = {}) => {
+  const m = await model;
   query = queryBuilderParser(query);
   if (options && options.select && options.select.length) {
     options.attributes = options.select;
@@ -66,7 +79,7 @@ const paginate = async (model, query, options = {}) => {
     where: query,
     ...options,
   };
-  const result = await model.paginate(options);
+  const result = await m.paginate(options);
   const data = {
     data: result.docs,
     paginator: {
@@ -81,6 +94,7 @@ const paginate = async (model, query, options = {}) => {
 
 // find multiple records without pagination
 const findAll = async (model, query, options = {}) => {
+  const m = await model;
   query = queryBuilderParser(query);
   if (options && options.select && options.select.length) {
     options.attributes = options.select;
@@ -105,20 +119,24 @@ const findAll = async (model, query, options = {}) => {
     where: query,
     ...options,
   };
-  return model.findAll(options);
+  return m.findAll(options);
 };
 
 // count records for specified query
 const count = async (model, query, options = {}) => {
+  const m = await model;
   query = queryBuilderParser(query);
-  return model.count({
+  return m.count({
     where: query,
     ...options,
   });
 };
 
 //
-const upsert = async (model, data, options = {}) => model.upsert(data, options);
+const upsert = async (model, data, options = {}) => {
+  const m = await model;
+  return m.upsert(data, options);
+}
 
 /*
  * @description : parser for query builder

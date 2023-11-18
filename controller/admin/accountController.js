@@ -146,7 +146,7 @@ const getAccountCount = async (req, res) => {
     }
     if (dataToCount && dataToCount.where){
       where = dataToCount.where;
-    }  
+    }
     let countedAccount = await dbService.count(await Account,where);
     if (!countedAccount){
       return res.recordNotFound();

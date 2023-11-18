@@ -285,7 +285,7 @@ const deleteRegion = async (req, res) => {
       }
       return res.success({ data :countedRegion });
     }
-    let deletedRegion = await deleteDependentService.deleteUser(query);
+    let deletedRegion = await deleteDependentService.deleteRegion(query);
     if (!deletedRegion){
       return res.recordNotFound(); 
     }
@@ -317,7 +317,7 @@ const deleteManyRegion = async (req, res) => {
       }
       return res.success({ data: countedRegion });            
     }
-    let deletedRegion = await deleteDependentService.deleteRegion(query);
+    let deletedRegion = await deleteDependentService.deleteManyRegion(query);
     if (!deletedRegion) {
       return res.recordNotFound();
     }

@@ -29,7 +29,7 @@ const addActivity = async (req, res) => {
     dataToCreate.addedBy = req.user.id;
     delete dataToCreate['updatedBy'];
         
-    let createdActivity = await dbService.createOne(Activity,dataToCreate);
+    let createdActivity = await dbService.createOne(await Activity,dataToCreate);
     return  res.success({ data :createdActivity });
   } catch (error) {
     return res.internalServerError({ message:error.message });  
@@ -52,7 +52,7 @@ const bulkInsertActivity = async (req, res)=>{
               
         return item;
       });
-      let createdActivity = await dbService.createMany(Activity,dataToCreate); 
+      let createdActivity = await dbService.createMany(await Activity,dataToCreate); 
       return  res.success({ data :{ count :createdActivity.length || 0 } });       
     }
   } catch (error){
@@ -84,7 +84,7 @@ const findAllActivity = async (req, res) => {
       query = dataToFind.query;
     }
     if (dataToFind && dataToFind.isCountOnly){
-      foundActivity = await dbService.count(Activity, query);
+      foundActivity = await dbService.count(await Activity, query);
       if (!foundActivity) {
         return res.recordNotFound();
       } 
@@ -94,7 +94,7 @@ const findAllActivity = async (req, res) => {
     if (dataToFind && dataToFind.options !== undefined) {
       options = dataToFind.options;
     }
-    foundActivity = await dbService.paginate( Activity,query,options);
+    foundActivity = await dbService.paginate( await Activity,query,options);
     if (!foundActivity){
       return res.recordNotFound();
     }
@@ -114,7 +114,7 @@ const findAllActivity = async (req, res) => {
 const getActivity = async (req, res) => {
   try { 
     let id = req.params.id;
-    let foundActivity = await dbService.findOne(Activity,{ id :id });
+    let foundActivity = await dbService.findOne(await Activity,{ id :id });
     if (!foundActivity){
       return res.recordNotFound();
     }
@@ -145,7 +145,7 @@ const getActivityCount = async (req, res) => {
     if (dataToCount && dataToCount.where){
       where = dataToCount.where;
     }  
-    let countedActivity = await dbService.count(Activity,where);
+    let countedActivity = await dbService.count(await Activity,where);
     if (!countedActivity){
       return res.recordNotFound();
     }
@@ -179,7 +179,7 @@ const updateActivity = async (req, res) => {
       return res.validationError({ message : `Invalid values in parameters, ${validateRequest.message}` });
     }
     query = { id:req.params.id };
-    let updatedActivity = await dbService.update(Activity,query,dataToUpdate);
+    let updatedActivity = await dbService.update(await Activity,query,dataToUpdate);
     return  res.success({ data :updatedActivity }); 
   } catch (error){
     return res.internalServerError({ data:error.message }); 
@@ -202,7 +202,7 @@ const bulkUpdateActivity = async (req, res)=>{
         updatedBy:req.user.id
       };
     }
-    let updatedActivity = await dbService.update(Activity,filter,dataToUpdate);
+    let updatedActivity = await dbService.update(await Activity,filter,dataToUpdate);
     if (!updatedActivity){
       return res.recordNotFound();
     }
@@ -231,7 +231,7 @@ const partialUpdateActivity = async (req, res) => {
       return res.validationError({ message : `Invalid values in parameters, ${validateRequest.message}` });
     }
     const query = { id:req.params.id };
-    let updatedActivity = await dbService.update(Activity, query, dataToUpdate);
+    let updatedActivity = await dbService.update(await Activity, query, dataToUpdate);
     if (!updatedActivity) {
       return res.recordNotFound();
     }
