@@ -30,10 +30,12 @@ const checkRolePermission = async (req, res, next) => {
   { attributes: ['roleId'] });
   if (rolesOfUser && rolesOfUser.length) {
     rolesOfUser = [...new Set((rolesOfUser).map((item) => item.roleId))];
+    console.log(rolesOfUser);
     const route = await dbService.findOne(model.projectRoute, {
       route_name: replaceAll((req.route.path.toLowerCase()), '/', '_'),
       uri: req.route.path.toLowerCase(),
     });
+    console.log(route.id)
     if (route) {
       const allowedRoute = await dbService.findAll(model.routeRole, {
 

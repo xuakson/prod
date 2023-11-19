@@ -216,7 +216,7 @@ const loginWithTwoFA = async (req, res) => {
       return res.badRequest({ message : 'Insufficient request parameters! username,password and code is required.' });
     }
     let where = { 'eMail':params.username };
-    where.isActive = true;where.isDeleted = false;        let User = await dbService.findOne(account,where);
+    where.isActive = true;where.isDeleted = false;        let User = await dbService.findOne(model.account,where);
     if (!User) {
       // invalid code
       return res.badRequest({ message :'Invalid Code' });

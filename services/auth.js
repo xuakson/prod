@@ -487,6 +487,7 @@ const sendResetPasswordNotification = async (user) => {
    * @return {obj}  : returns authentication object {flag,data}.
    */
   const loginWithOTP = async (username, password, platform, roleAccess) => {
+    const model = await models;
     try {
       let result = await loginUser(username, password, platform, roleAccess);
       if (!result.flag) {
